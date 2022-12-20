@@ -7,7 +7,7 @@ exports.register = async (req, res) => {
     const { fname, email, password, cpassword } = req.body;
 
     if (!fname || !email || !password || !cpassword) {
-        return res.status(401).json("Please Fill All The Data")
+         res.status(401).json("Please Fill All The Data")
     }
 
     try {
@@ -15,9 +15,9 @@ exports.register = async (req, res) => {
         const preuser = await users.findOne({ email: email });
 
         if (preuser) {
-            return res.status(401).json("This User is Already Exist In our Db")
+             res.status(401).json("This User is Already Exist In our Db")
         } else if (password !== cpassword) {
-            return res.status(401).json("Password And Confirm Password Not match")
+             res.status(401).json("Password And Confirm Password Not match")
         } else {
             const user = new users({
                 fname, email, password, confirmpassword: cpassword
@@ -27,10 +27,10 @@ exports.register = async (req, res) => {
 
             await user.save();
 
-            return res.status(201).json(user)
+             res.status(201).json(user)
         }
     } catch (error) {
-        return res.status(401).json(error)
+         res.status(401).json(error)
     }
 }
 
@@ -41,7 +41,7 @@ exports.login = async (req, res) => {
     try {
 
         if (!email || !password) {
-            return res.status(401).json("Please Fill All The Data")
+             res.status(401).json("Please Fill All The Data")
         }
 
         const preuser = await users.findOne({ email: email });
@@ -53,16 +53,16 @@ exports.login = async (req, res) => {
                 // token generating
                 const token = await preuser.Authorizationoken();
 
-                return res.status(201).json({ preuser, token });
+                res.status(201).json({ preuser, token });
             } else {
-                return res.status(401).json("invalid details")
+                 res.status(401).json("invalid details")
             }
         } else {
-            return res.status(401).json("invalid details")
+             res.status(401).json("invalid details")
         }
 
     } catch (error) {
-        return res.status(401).json(error)
+         res.status(401).json(error)
     }
 }
 
@@ -80,7 +80,7 @@ exports.uservalid = async (req, res) => {
 exports.userlogout = async (req, res) => {
     try {
         req.rootUser.tokens = req.rootUser.tokens.filter((curelem) => {
-            return curelem.token !== req.token
+             curelem.token !== req.token
         });
 
         req.rootUser.save();
